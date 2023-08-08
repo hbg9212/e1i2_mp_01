@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-
-public class startBtn : MonoBehaviour
+public class pressTheScreen : MonoBehaviour
 {
+    public Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +18,9 @@ public class startBtn : MonoBehaviour
         
     }
 
-    public void startGame()
+    public void PressThesScreen()
     {
-        SceneManager.LoadScene("LevelScene");
+        gameObject.SetActive(false);
+        anim.SetBool("press", true);
     }
 }
