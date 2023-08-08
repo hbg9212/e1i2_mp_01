@@ -17,6 +17,7 @@ public class gameManager : MonoBehaviour
 
     public float time = 0.0f;
     int count = 0;
+    int lev = 0;
     public Text countTxt;
     public Text idleText;
     public Text imminentText;
@@ -59,34 +60,39 @@ public class gameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        lev = 0;
+        if (PlayerPrefs.HasKey("level") != false)
+        {
+            lev = PlayerPrefs.GetInt("level");
+        }
+
         count = 0;
         time = 60.0f;
         AllCardShuffle();
         Time.timeScale = 1.0f;
 
         string[] setCard = ShuffleArray(allCardName);
-        setCard = setCard.Take(8).ToArray();
+        setCard = setCard.Take(6+lev*2).ToArray();
         setCard = setCard.Concat(setCard).ToArray();
         setCard = ShuffleArray(setCard);
-
-        for (int i = 0; i < 16; i++)
+        int b = 0;
+        for (int i = 0; i < 3+lev*1; i++)
         {
-            GameObject newCard = Instantiate(card);
-            newCard.transform.parent = GameObject.Find("cards").transform;
+            for ( int a = 0; a < 4; a++)
+            {
+                GameObject newCard = Instantiate(card);
+                newCard.transform.parent = GameObject.Find("cards").transform;
 
-            float x = (i / 4) * 1.4f - 2.1f;
-            float y = (i % 4) * 1.4f - 3.0f;
-            newCard.transform.position = new Vector3(0, y, 0);
-            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(setCard[i]);
+                float x = a * 1.4f - 2.1f;
+                float y = (2.75f - (2-lev)*0.5f )- i * 1.4f;
+                newCard.transform.position = new Vector3(x, y, 0);
+                newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(setCard[b++]);
+            }
            
-            cardSet(newCard, x);
+
         }
     }
 
-    void cardSet(GameObject card, float x)
-    {
-        card.transform.position += new Vector3(x, 0, 0);
-    }
 
     // Update is called once per frame
     void Update()
@@ -122,8 +128,8 @@ public class gameManager : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip match;
     public AudioClip unMatch;
-    public Text matchedTxt;
-    public Text unmatchedTxt;
+    public GameObject matchedTxt;
+    public GameObject unmatchedTxt;
    
 
     bool matchB = true;
@@ -141,17 +147,27 @@ public class gameManager : MonoBehaviour
 
             if (firstCardImage.Substring(0, 1) == "h")
             {
-                matchedTxt.text = "한병권";
+                GameObject matched = Instantiate(matchedTxt);
+                matched.transform.parent = GameObject.Find("top").transform;
+                matched.GetComponent<matchedTxt>().nameSet("한병권");
+                matched.transform.position = new Vector3(0, 440, 0);
+
             } 
             else if (firstCardImage.Substring(0, 1) == "k")
             {
-                matchedTxt.text = "김명식";
+                GameObject matched = Instantiate(matchedTxt);
+                matched.transform.parent = GameObject.Find("top").transform;
+                matched.GetComponent<matchedTxt>().nameSet("김명식");
+                matched.transform.position = new Vector3(0, 440, 0);
             }
             else if (firstCardImage.Substring(0, 1) == "s")
             {
-                matchedTxt.text = "송명근";
+                GameObject matched = Instantiate(matchedTxt);
+                matched.transform.parent = GameObject.Find("top").transform;
+                matched.GetComponent<matchedTxt>().nameSet("송명근");
+                matched.transform.position = new Vector3(0, 440, 0);
             }
-            unmatchedTxt.text = "";
+
 
             firstCard.GetComponent<card>().destroyCard();
             secondCard.GetComponent<card>().destroyCard();
@@ -161,39 +177,46 @@ public class gameManager : MonoBehaviour
             {
                 endTxt.SetActive(true);
                 Time.timeScale = 0.0f;
+
+                int score = 0;
+                score = (int)(time * 100) + 1000 / count;
+                if (lev == 0)
+                {
+                    PlayerPrefs.SetInt("ezScore", score);
+                }
+                else if(lev == 1)
+                {
+                    PlayerPrefs.SetInt("normalScore", score);
+                }
+                else if(lev ==2)
+                {
+                    PlayerPrefs.SetInt("hardScore", score);
+                }
             }
-            if (matchB) Invoke("destroyMatchedTxtInvoke", 1.0f);
+
             audioSource.PlayOneShot(match);
-            matchB = false;
+
         }
         else
         {
             firstCard.GetComponent<card>().closeCard();
             secondCard.GetComponent<card>().closeCard();
-            unmatchedTxt.text = "실패";
-            matchedTxt.text = "";
+
             GameObject timeLossTxt = Instantiate(timeLoss);
             timeLossTxt.transform.parent = GameObject.Find("top").transform;
             timeLossTxt.transform.position = new Vector3(0, 520, 0);
+
+            GameObject unmatched = Instantiate(unmatchedTxt);
+            unmatched.transform.parent = GameObject.Find("top").transform;
+            unmatched.transform.position = new Vector3(0, 440, 0);
             audioSource.PlayOneShot(unMatch);
 
             time--;
-            if(unMatchB) Invoke("destroyUnmatchedTxtInvoke", 1.0f);
-            unMatchB = false;
         }
 
         firstCard = null;
         secondCard = null;
     }
 
-    void destroyMatchedTxtInvoke()
-    {
-        matchedTxt.text = "";
-        matchB = true;
-    }
-    void destroyUnmatchedTxtInvoke()
-    {
-        unmatchedTxt.text = "";
-        unMatchB = true;
-    }
+
 }
