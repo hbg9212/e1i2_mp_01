@@ -15,7 +15,9 @@ public class gameManager : MonoBehaviour
 
     public GameObject card;
 
-    float time = 0.0f;
+    public float time = 0.0f;
+    int count = 0;
+    public Text countTxt;
     public Text idleText;
     public Text imminentText;
     public GameObject endTxt;
@@ -57,7 +59,8 @@ public class gameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        time = 30.0f;
+        count = 0;
+        time = 60.0f;
         AllCardShuffle();
         Time.timeScale = 1.0f;
 
@@ -73,25 +76,35 @@ public class gameManager : MonoBehaviour
 
             float x = (i / 4) * 1.4f - 2.1f;
             float y = (i % 4) * 1.4f - 3.0f;
-            newCard.transform.position = new Vector3(x, y, 0);
+            newCard.transform.position = new Vector3(0, y, 0);
             newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(setCard[i]);
+           
+            cardSet(newCard, x);
         }
+    }
+
+    void cardSet(GameObject card, float x)
+    {
+        card.transform.position += new Vector3(x, 0, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        countTxt.text = count.ToString();
         time -= Time.deltaTime;
 
-        if (time > 5.0f)
+        if (time > 10.0f)
         {
             idleText.text = time.ToString("N2");
             imminentText.text = "";
+
         }
-        else if (time <= 5.0f && time > 0.0f)
+        else if (time <= 10.0f && time > 0.0f)
         {
             idleText.text = "";
             imminentText.text = time.ToString("N2");
+    
         }
         else if (time <= 0.0f)
         {
@@ -104,13 +117,22 @@ public class gameManager : MonoBehaviour
     public GameObject firstCard;
     public GameObject secondCard;
 
+    public GameObject timeLoss;
+
     public AudioSource audioSource;
     public AudioClip match;
+    public AudioClip unMatch;
     public Text matchedTxt;
     public Text unmatchedTxt;
+   
+
+    bool matchB = true;
+    bool unMatchB = true;
 
     public void isMatched()
     {
+
+        count++;
         string firstCardImage = firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name;
         string secondCardImage = secondCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name;
 
@@ -129,8 +151,7 @@ public class gameManager : MonoBehaviour
             {
                 matchedTxt.text = "송명근";
             }
-            Invoke("destroyMatchedTxtInvoke", 1.0f);
-            audioSource.PlayOneShot(match);
+            unmatchedTxt.text = "";
 
             firstCard.GetComponent<card>().destroyCard();
             secondCard.GetComponent<card>().destroyCard();
@@ -141,15 +162,24 @@ public class gameManager : MonoBehaviour
                 endTxt.SetActive(true);
                 Time.timeScale = 0.0f;
             }
-
+            if (matchB) Invoke("destroyMatchedTxtInvoke", 1.0f);
+            audioSource.PlayOneShot(match);
+            matchB = false;
         }
         else
         {
             firstCard.GetComponent<card>().closeCard();
             secondCard.GetComponent<card>().closeCard();
             unmatchedTxt.text = "실패";
+            matchedTxt.text = "";
+            GameObject timeLossTxt = Instantiate(timeLoss);
+            timeLossTxt.transform.parent = GameObject.Find("top").transform;
+            timeLossTxt.transform.position = new Vector3(0, 520, 0);
+            audioSource.PlayOneShot(unMatch);
+
             time--;
-            Invoke("destroyUnmatchedTxtInvoke", 1.0f);
+            if(unMatchB) Invoke("destroyUnmatchedTxtInvoke", 1.0f);
+            unMatchB = false;
         }
 
         firstCard = null;
@@ -159,9 +189,11 @@ public class gameManager : MonoBehaviour
     void destroyMatchedTxtInvoke()
     {
         matchedTxt.text = "";
+        matchB = true;
     }
     void destroyUnmatchedTxtInvoke()
     {
         unmatchedTxt.text = "";
+        unMatchB = true;
     }
 }
