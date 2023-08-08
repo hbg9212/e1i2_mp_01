@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-public class startBtn : MonoBehaviour
+public class teamBtn : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -18,8 +17,8 @@ public class startBtn : MonoBehaviour
         
     }
 
-    public void startGame()
+    public void teamScene()
     {
-        SceneManager.LoadScene("LevelScene");
+        SceneManager.LoadScene("TeamScene");
     }
 }
