@@ -57,10 +57,12 @@ public class gameManager : MonoBehaviour
         return array;
     }
 
+    bool gameStop = false;
     // Start is called before the first frame update
     void Start()
     {
         lev = 0;
+        gameStop = true;
         if (PlayerPrefs.HasKey("level") != false)
         {
             lev = PlayerPrefs.GetInt("level");
@@ -88,38 +90,73 @@ public class gameManager : MonoBehaviour
                 newCard.transform.position = new Vector3(x, y, 0);
                 newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(setCard[b++]);
             }
-           
 
         }
     }
 
-
+    public GameObject panelD;
+    
     // Update is called once per frame
     void Update()
     {
-        countTxt.text = count.ToString();
-        time -= Time.deltaTime;
+        if(gameStop)
+        {
+            countTxt.text = count.ToString();
+            time -= Time.deltaTime;
 
-        if (time > 10.0f)
-        {
-            idleText.text = time.ToString("N2");
-            imminentText.text = "";
+            if (time > 10.0f)
+            {
+                idleText.text = time.ToString("N2");
+                imminentText.text = "";
 
+            }
+            else if (time <= 10.0f && time > 0.0f)
+            {
+                idleText.text = "";
+                imminentText.text = time.ToString("N2");
+
+            }
+            else if (time <= 0.0f)
+            {
+                imminentText.text = "0.00";
+                gameStop = false;
+                GameObject panel = Instantiate(panelD);
+                panel.transform.parent = GameObject.Find("MainBackground").transform;
+                panel.transform.position = new Vector3(0, 0, 0);
+
+                if (lev == 0)
+                {
+                    if (PlayerPrefs.HasKey("ezScore") != false)
+                    {
+                        panel.GetComponent<panel>().bestScoreSet(PlayerPrefs.GetInt("ezScore").ToString());
+                    }
+
+                }
+                else if (lev == 1)
+                {
+
+                    if (PlayerPrefs.HasKey("normalScore") != false)
+                    {
+                        panel.GetComponent<panel>().bestScoreSet(PlayerPrefs.GetInt("normalScore").ToString());
+                    }
+
+                }
+                else if (lev == 2)
+                {
+
+                    if (PlayerPrefs.HasKey("hardScore") != false)
+                    {
+                        panel.GetComponent<panel>().bestScoreSet(PlayerPrefs.GetInt("hardScore").ToString());
+                    }
+
+                }
+
+            }
         }
-        else if (time <= 10.0f && time > 0.0f)
-        {
-            idleText.text = "";
-            imminentText.text = time.ToString("N2");
-    
-        }
-        else if (time <= 0.0f)
-        {
-            imminentText.text = "0.00";
-            endTxt.SetActive(true);
-            Time.timeScale = 0.0f;
-        }
+
     }
 
+  
     public GameObject firstCard;
     public GameObject secondCard;
 
@@ -130,11 +167,7 @@ public class gameManager : MonoBehaviour
     public AudioClip unMatch;
     public GameObject matchedTxt;
     public GameObject unmatchedTxt;
-   
-
-    bool matchB = true;
-    bool unMatchB = true;
-
+    public GameObject panelV;
     public void isMatched()
     {
 
@@ -175,9 +208,10 @@ public class gameManager : MonoBehaviour
             int cardsLeft = GameObject.Find("cards").transform.childCount;
             if (cardsLeft == 2)
             {
-                endTxt.SetActive(true);
-                Time.timeScale = 0.0f;
 
+                GameObject panel = Instantiate(panelV);
+                panel.transform.parent = GameObject.Find("MainBackground").transform;
+                panel.transform.position = new Vector3(0, 0, 0);
                 int score = 0;
                 score = (int)(time * 100) + 1000 / count;
                 if (lev == 0)
@@ -193,6 +227,9 @@ public class gameManager : MonoBehaviour
                             PlayerPrefs.SetInt("ezScore", score);
                         }
                     }
+
+                    panel.GetComponent<panel>().bestScoreSet(PlayerPrefs.GetInt("ezScore").ToString());
+                    panel.GetComponent<panel>().nowScoreSet(score.ToString());
                 }
                 else if(lev == 1)
                 {
@@ -208,6 +245,8 @@ public class gameManager : MonoBehaviour
                             PlayerPrefs.SetInt("normalScore", score);
                         }
                     }
+                    panel.GetComponent<panel>().bestScoreSet(PlayerPrefs.GetInt("normalScore").ToString());
+                    panel.GetComponent<panel>().nowScoreSet(score.ToString());
                 }
                 else if(lev ==2)
                 {
@@ -223,8 +262,11 @@ public class gameManager : MonoBehaviour
                             PlayerPrefs.SetInt("hardScore", score);
                         }
                     }
- 
+                    panel.GetComponent<panel>().bestScoreSet(PlayerPrefs.GetInt("hardScore").ToString());
+                    panel.GetComponent<panel>().nowScoreSet(score.ToString());
+
                 }
+                gameStop = false;
             }
 
             audioSource.PlayOneShot(match);
