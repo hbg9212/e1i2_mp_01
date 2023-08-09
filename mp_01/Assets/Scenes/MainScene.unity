@@ -159,6 +159,7 @@ MonoBehaviour:
   idleText: {fileID: 691049781}
   imminentText: {fileID: 1705534724}
   endTxt: {fileID: 1281874193}
+  panelD: {fileID: 6657204117686321143, guid: ae7e0c008ddcc7643b356d9a291cd08d, type: 3}
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
   timeLoss: {fileID: 2953859050932154445, guid: be146eb5bc1d35f449490ded166a65d8, type: 3}
@@ -167,6 +168,7 @@ MonoBehaviour:
   unMatch: {fileID: 8300000, guid: 92dab80e70519da4ca320fc1cdb81372, type: 3}
   matchedTxt: {fileID: 2953859050932154445, guid: a24110a1f7e967a4fbcf4f57f0352e05, type: 3}
   unmatchedTxt: {fileID: 2953859050932154445, guid: 49706a0dadd871b43b1fe650abcfdf28, type: 3}
+  panelV: {fileID: 5961606782610573240, guid: e44c49e1a3b9e314fab97f5252e52953, type: 3}
 --- !u!4 &89598841
 Transform:
   m_ObjectHideFlags: 0
