@@ -182,15 +182,48 @@ public class gameManager : MonoBehaviour
                 score = (int)(time * 100) + 1000 / count;
                 if (lev == 0)
                 {
-                    PlayerPrefs.SetInt("ezScore", score);
+                    if (PlayerPrefs.HasKey("ezScore") == false)
+                    {
+                        PlayerPrefs.SetInt("ezScore", score);
+                    }
+                    else
+                    {
+                        if (PlayerPrefs.GetInt("ezScore") < score)
+                        {
+                            PlayerPrefs.SetInt("ezScore", score);
+                        }
+                    }
                 }
                 else if(lev == 1)
                 {
-                    PlayerPrefs.SetInt("normalScore", score);
+
+                    if (PlayerPrefs.HasKey("normalScore") == false)
+                    {
+                        PlayerPrefs.SetInt("normalScore", score);
+                    }
+                    else
+                    {
+                        if (PlayerPrefs.GetInt("normalScore") < score)
+                        {
+                            PlayerPrefs.SetInt("normalScore", score);
+                        }
+                    }
                 }
                 else if(lev ==2)
                 {
-                    PlayerPrefs.SetInt("hardScore", score);
+
+                    if (PlayerPrefs.HasKey("hardScore") == false)
+                    {
+                        PlayerPrefs.SetInt("hardScore", score);
+                    }
+                    else
+                    {
+                        if (PlayerPrefs.GetInt("hardScore") < score)
+                        {
+                            PlayerPrefs.SetInt("hardScore", score);
+                        }
+                    }
+ 
                 }
             }
 
