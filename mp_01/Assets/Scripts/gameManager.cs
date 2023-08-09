@@ -84,7 +84,7 @@ public class gameManager : MonoBehaviour
                 newCard.transform.parent = GameObject.Find("cards").transform;
 
                 float x = a * 1.4f - 2.1f;
-                float y = (2.75f - (2-lev)*0.5f )- i * 1.4f;
+                float y = (2.75f - (2-lev)*0.5f )- i * 1.6f;
                 newCard.transform.position = new Vector3(x, y, 0);
                 newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(setCard[b++]);
             }

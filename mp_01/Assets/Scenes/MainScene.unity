@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ab665f12d788e45968f336f04321bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card: {fileID: 2881804516446339339, guid: 2caf2c03a804c3b4597b78bfa79d2b41, type: 3}
+  card: {fileID: 4996716491216423355, guid: 2caf2c03a804c3b4597b78bfa79d2b41, type: 3}
   time: 0
   countTxt: {fileID: 915509723}
   idleText: {fileID: 691049781}
@@ -1534,6 +1534,7 @@ GameObject:
   - component: {fileID: 1705534722}
   - component: {fileID: 1705534723}
   - component: {fileID: 1705534724}
+  - component: {fileID: 1705534725}
   m_Layer: 5
   m_Name: imminent
   m_TagString: Untagged
@@ -1602,6 +1603,27 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!95 &1705534725
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1705534721}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b0b851c5eab57ef46a9ae0eb5ef084cc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1747919656
 GameObject:
   m_ObjectHideFlags: 0
