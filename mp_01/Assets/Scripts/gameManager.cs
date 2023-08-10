@@ -20,6 +20,8 @@ public class gameManager : MonoBehaviour
     public float time = 0.0f;
     int count = 0;
     int lev = 0;
+
+    public Text minCountTxt;
     public Text countTxt;
     public Text idleText;
     public Text imminentText;
@@ -74,6 +76,18 @@ public class gameManager : MonoBehaviour
         AllCardShuffle();
         Time.timeScale = 0.0f;
 
+        if(lev == 0 && PlayerPrefs.HasKey("ezCount"))
+        {
+            minCountTxt.text = PlayerPrefs.GetInt("ezCount").ToString();
+        } 
+        else if(lev == 1 && PlayerPrefs.HasKey("normalCount"))
+        {
+            minCountTxt.text = PlayerPrefs.GetInt("normalCount").ToString();
+        }
+        else if (lev == 2 && PlayerPrefs.HasKey("hardCount"))
+        {
+            minCountTxt.text = PlayerPrefs.GetInt("hardCount").ToString();
+        }
         string[] setCard = ShuffleArray(allCardName);
         setCard = setCard.Take(6+lev*2).ToArray();
         setCard = setCard.Concat(setCard).ToArray();
@@ -182,7 +196,7 @@ public class gameManager : MonoBehaviour
     public void isMatched()
     {
 
-        count++;
+       
         string firstCardImage = firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name;
         string secondCardImage = secondCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name;
 
@@ -230,12 +244,18 @@ public class gameManager : MonoBehaviour
                     if (PlayerPrefs.HasKey("ezScore") == false)
                     {
                         PlayerPrefs.SetInt("ezScore", score);
+                        PlayerPrefs.SetInt("ezCount", count);
                     }
                     else
                     {
                         if (PlayerPrefs.GetInt("ezScore") < score)
                         {
                             PlayerPrefs.SetInt("ezScore", score);
+                        }
+
+                        if (PlayerPrefs.GetInt("ezCount") > count)
+                        {
+                            PlayerPrefs.SetInt("ezCount", count);
                         }
                     }
 
@@ -248,12 +268,18 @@ public class gameManager : MonoBehaviour
                     if (PlayerPrefs.HasKey("normalScore") == false)
                     {
                         PlayerPrefs.SetInt("normalScore", score);
+                        PlayerPrefs.SetInt("normalCount", count);
                     }
                     else
                     {
                         if (PlayerPrefs.GetInt("normalScore") < score)
                         {
                             PlayerPrefs.SetInt("normalScore", score);
+                        }
+
+                        if (PlayerPrefs.GetInt("normalCount") > count)
+                        {
+                            PlayerPrefs.SetInt("normalCount", count);
                         }
                     }
                     panel.GetComponent<panel>().bestScoreSet(PlayerPrefs.GetInt("normalScore").ToString());
@@ -265,12 +291,18 @@ public class gameManager : MonoBehaviour
                     if (PlayerPrefs.HasKey("hardScore") == false)
                     {
                         PlayerPrefs.SetInt("hardScore", score);
+                        PlayerPrefs.SetInt("hardCount", count);
                     }
                     else
                     {
                         if (PlayerPrefs.GetInt("hardScore") < score)
                         {
                             PlayerPrefs.SetInt("hardScore", score);
+                        }
+
+                        if (PlayerPrefs.GetInt("hardCount") > count)
+                        {
+                            PlayerPrefs.SetInt("hardCount", count);
                         }
                     }
                     panel.GetComponent<panel>().bestScoreSet(PlayerPrefs.GetInt("hardScore").ToString());
@@ -285,6 +317,7 @@ public class gameManager : MonoBehaviour
         }
         else
         {
+            count++;
             firstCard.GetComponent<card>().closeCard();
             secondCard.GetComponent<card>().closeCard();
 
