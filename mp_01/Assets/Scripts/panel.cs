@@ -32,7 +32,7 @@ public class panel : MonoBehaviour
 
     public void goBack()
     {
-        SceneManager.LoadScene("LevelScene");
+        SceneManager.LoadScene("StartScene");
     }
 
     // Update is called once per frame
