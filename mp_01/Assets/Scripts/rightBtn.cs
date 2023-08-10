@@ -37,6 +37,7 @@ public class rightBtn : MonoBehaviour
                 break;
             case 1:
                 leftBtnA.SetActive(true);
+                rightBtnA.SetActive(true);
                 hbg.SetActive(false);
                 kms.SetActive(true);
                 smg.SetActive(false);
