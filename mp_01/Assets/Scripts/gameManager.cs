@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,19 +61,18 @@ public class gameManager : MonoBehaviour
 
     bool gameStop = false;
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
         lev = 0;
-        gameStop = true;
+        gameStop = false;
         if (PlayerPrefs.HasKey("level") != false)
         {
             lev = PlayerPrefs.GetInt("level");
         }
 
         count = 0;
-        time = 60.0f;
         AllCardShuffle();
-        Time.timeScale = 1.0f;
+        Time.timeScale = 0.0f;
 
         string[] setCard = ShuffleArray(allCardName);
         setCard = setCard.Take(6+lev*2).ToArray();
@@ -87,12 +88,22 @@ public class gameManager : MonoBehaviour
 
                 float x = a * 1.4f - 2.1f;
                 float y = (2.75f - (2-lev)*0.5f )- i * 1.6f;
-                newCard.transform.position = new Vector3(x, y, 0);
+                newCard.transform.position = new Vector3(-2.1f - (1 - a) * 1.4f, y, 0);
                 newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(setCard[b++]);
+
+                for (float f = -2.1f - (1 - a) * 1.4f; f < x; f += 0.1f)
+                {
+                    newCard.transform.position += new Vector3(0.1f, 0, 0);
+                    await Task.Delay(1);
+                }
             }
 
         }
+        time = 60.0f;
+        Time.timeScale = 1.0f;
+        gameStop = true;
     }
+
 
     public GameObject panelD;
     
