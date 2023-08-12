@@ -16,7 +16,8 @@ public class levelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
- 
+
+
         if (PlayerPrefs.HasKey("ezScore") != false)
         {
             ezScore.text = PlayerPrefs.GetInt("ezScore").ToString();
